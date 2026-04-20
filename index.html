@@ -2,62 +2,95 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>交接管理系統 B4.1.14</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交接系統 B4.1.12</title>
 <style>
-body{margin:0;font-family:sans-serif;background:#f3f4f6}
-.container{display:flex;gap:20px;padding:20px}
-.left{flex:2;background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:#fff;padding:30px;border-radius:16px}
-.right{flex:1;background:#fff;padding:20px;border-radius:16px}
-input{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ddd}
-.btn{padding:12px;border:none;border-radius:8px;width:100%;cursor:pointer;margin-top:10px}
-.login{background:#0f172a;color:#fff}
-.forget{background:#eee}
+body { font-family: Arial; text-align:center; margin-top:50px; }
+input { padding:8px; margin:5px; width:200px; }
+button { padding:10px 20px; margin-top:10px; }
+#dashboard { display:none; }
+.card { border:1px solid #ccc; padding:10px; margin:10px auto; width:300px; }
 </style>
 </head>
+
 <body>
 
-<div class="container">
-<div class="left">
-<h1>今日天氣資訊</h1>
-<h2>26°</h2>
-<p>多雲到晴・夜間舒適</p>
+<div id="login">
+  <h2>入口 / 登入</h2>
+  <input id="email" placeholder="帳號"><br>
+  <input id="password" type="password" placeholder="密碼"><br>
+  <button onclick="login()">登入</button>
 </div>
 
-<div class="right">
-<h2>入口</h2>
-<input id="email" type="email" placeholder="請輸入 Email">
-<input id="password" type="password" placeholder="至少 6 碼">
-<button class="btn login" onclick="login()">登入</button>
-<button class="btn forget">忘記密碼</button>
-<p id="msg" style="color:red;"></p>
-</div>
+<div id="dashboard">
+  <h2>後台首頁 (B4.1.12)</h2>
+  <p>系統正常運作 ✅</p>
+
+  <h3>新增交接事項</h3>
+  <input id="taskInput" placeholder="輸入內容">
+  <button onclick="addTask()">新增</button>
+
+  <h3>交接列表</h3>
+  <div id="taskList"></div>
+
+  <br>
+  <button onclick="logout()">登出</button>
 </div>
 
 <script>
-window.onload = () => {
-  const saved = localStorage.getItem("email");
-  if(saved){
-    document.getElementById("email").value = saved;
-  }
-};
+let tasks = [];
 
 function login(){
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
   if(email === "admin690607@gmail.com" && password === "123456"){
-    localStorage.setItem("email", email);
-    window.location.href = "dashboard.html";
-  }else{
-    document.getElementById("msg").innerText = "帳號或密碼錯誤";
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  } else {
+    alert("帳號或密碼錯誤");
   }
 }
-</script>
 
-<div style="position:fixed;bottom:10px;left:10px;font-size:12px;color:#666">
-版本：B4.1.14
-</div>
+function logout(){
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('login').style.display = 'block';
+}
+
+function addTask(){
+  const text = document.getElementById('taskInput').value;
+  if(!text) return;
+
+  tasks.push({text, read:false});
+  document.getElementById('taskInput').value = "";
+  render();
+}
+
+function toggleRead(index){
+  tasks[index].read = !tasks[index].read;
+  render();
+}
+
+function deleteTask(index){
+  tasks.splice(index,1);
+  render();
+}
+
+function render(){
+  const list = document.getElementById('taskList');
+  list.innerHTML = "";
+
+  tasks.forEach((t,i)=>{
+    list.innerHTML += `
+      <div class="card">
+        <b>${t.text}</b><br>
+        狀態：${t.read ? "已讀" : "未讀"}<br><br>
+        <button onclick="toggleRead(${i})">切換已讀</button>
+        <button onclick="deleteTask(${i})">刪除</button>
+      </div>
+    `;
+  });
+}
+</script>
 
 </body>
 </html>
