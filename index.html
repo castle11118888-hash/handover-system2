@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>B4.1.12 首頁門面版</title>
+<title>B4.1.13 完整版</title>
 <style>
 body{font-family:Arial;background:#f5f6fa;margin:0;padding:20px;display:flex;gap:20px}
 .left{flex:2;background:linear-gradient(135deg,#2b4cc7,#5fa8ff);color:#fff;padding:30px;border-radius:20px}
@@ -14,7 +14,7 @@ input{padding:10px;width:100%;margin:10px 0}
 <body>
 
 <div class="left">
-<h3>B4.1.12 首頁門面版</h3>
+<h3>B4.1.13</h3>
 <h1>今天天氣資訊</h1>
 <h2>26°</h2>
 <p>多雲到晴・夜間體感舒適</p>
@@ -35,7 +35,7 @@ function login(){
   const e=document.getElementById('email').value;
   const p=document.getElementById('password').value;
   if(e==="admin690607@gmail.com" && p==="123456"){
-    alert("登入成功（此為單檔版）");
+    window.location.href="dashboard.html";
   }else{
     alert("帳號或密碼錯誤");
   }
